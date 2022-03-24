@@ -1,24 +1,30 @@
 const users = require('./db');
-
+//const md5 = require('md5')
+const date = require('date-and-time')
+//const v4 = require('uuid')
 const getUser = function(lastname){
     return users.find(u=>lastname == u.lastname);
 }
-const getUsers = function(){
+const getUsers = function(){ 
     return users
 }
+const getUserById = function(id){
+    return users.find(u=>id == u.id);
+}
 const createUser = function(data){
+    //data.id = v4
+    //data.mdp = md5(data.mdp)
     users.push(data)
 }
 
 const updateUser = function(id,data){
-   if (users.find(u=>id == u.id)){
-        users = data;
-   }
+   users.splice(id,-1,data)
 }
 
 const deleteUser = function(id){
-        users.splice(data)
+    users.slice(id)
 }
+
 module.exports = {
     getUser,
     getUsers,
