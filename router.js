@@ -11,7 +11,6 @@ router.use (function log(req,res,next){
     console.log("Time request : ",new Date()-now ," ms") 
     next()
     console.log(req.method , req.baseUrl,req.url)
-
 })
 
 router.get("/users",(req,res)=>{
