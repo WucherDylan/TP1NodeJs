@@ -1,6 +1,15 @@
 const express = require('express');
 const { DateTime } = require('luxon');
 const cors = require('cors');
+const jwt = require('express-jwt')
+
+const initJwt = (app) =>{
+  app.use (jwt({
+      secret: 'shhhhhhared-secret',
+      algorithms: ['HS256'],
+      credentialsRequired:false
+    }))
+  }
 
 const initJsonHandlerMiddlware = (app) => app.use(express.json());
 
@@ -14,7 +23,6 @@ const initLoggerMiddlware = (app) => {
       const requestDate = begin.toString();
       const remoteIP = `IP: ${req.connection.remoteAddress}`;
       const httpInfo = `${req.method} ${req.baseUrl || req.path}`;
-
       const end = new DateTime(new Date());
       const requestDurationMs = end.diff(begin).toMillis();
       const requestDuration = `Duration: ${requestDurationMs}ms`;
@@ -29,6 +37,7 @@ exports.initializeConfigMiddlewares = (app) => {
   initJsonHandlerMiddlware(app);
   initCorsMiddlware(app);
   initLoggerMiddlware(app);
+  initJwt(app)
 }
 
 exports.initializeErrorMiddlwares = (app) => {

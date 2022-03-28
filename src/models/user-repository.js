@@ -1,8 +1,31 @@
 const { users } = require('./db');
 const md5 = require('md5');
 const uuid = require('uuid');
-const bcrypt = require('bcrypt')
-const saltRounds = 12
+const bcrypt = require('bcryptjs');
+const saltRounds = 12;
+const jwt = require('jsonwebtoken');
+// const token = jwt.sign({secret:"secret"})
+
+exports.getLogin  = function(data){
+  const leUser = users.find((user) => user.firstName == data.firstName)
+  bcrypt.compare(data.password,leUser.password,function(err,res){
+    if (res === true){
+      console.log("T'es co")
+      const sign = jwt.sign(leUser.id,'secret');
+      //jwt.verify(token,'secret',function(err,sign){
+      //   console.log(sign.leUser.firstName)
+      // })
+      console.log(sign) 
+      
+
+    }
+    else console.log("err")
+  })
+    
+    
+ 
+ 
+}
 
 exports.getUsers = () => {
   return users;
@@ -14,23 +37,31 @@ exports.getUserByFirstName = (firstName) => {
   if (!foundUser) {
     throw new Error('User not found');
   }
-
   return foundUser;
 };
 
 exports.createUser = (data) => {
+  bcrypt.hash(data.password, saltRounds, function(err, hash) {
+    data.password = hash
+  })
+function resolveAfter2Second(){
+  return new Promise(resolve=>{
+    setTimeout(()=>{    
+      const user = {
+        id: uuid.v4(),
+        firstName: data.firstName,
+        lastName: data.lastName,
+        password : data.password
+      };
+      users.push(user);
+    },2000)
+  });
+} 
   
-    data.id = uuidv4(data.id)
-    
-  const user = {
-    id: uuid.v4(),
-    firstName: data.firstName,
-    lastName: data.lastName,
-    password : bcrypt.hash(data.mdp, saltRounds, function(err, hash) {
-      data.mdp = hash
-       })
-  };
-  users.push(user);
+  resolveAfter2Second()
+  
+  
+ 
 };
 
 exports.updateUser = (id, data) => {

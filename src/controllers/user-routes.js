@@ -1,13 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const userRepository = require('../models/user-repository');
-const jwt = require('express-jwt')
 
-router.use (jwt({
-    secret: 'shhhhhhared-secret',
-    algorithms: ['HS256'],
-    credentialsRequired:false
-  }))
+
 
 router.get('/', (req, res) => {
   res.send(userRepository.getUsers())
@@ -16,10 +11,9 @@ router.get('/', (req, res) => {
 router.get('/:firstName', (req, res) => {
   const foundUser = userRepository.getUserByFirstName(req.params.firstName);
 
-  if (!foundUser) {
-    throw new Error('User not found');
+if (!foundUser) {
+  throw new Error('User not found');
   }
-
   res.send(foundUser);
 });
 
