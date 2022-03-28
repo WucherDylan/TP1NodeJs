@@ -19,13 +19,17 @@ exports.getUserByFirstName = (firstName) => {
 };
 
 exports.createUser = (data) => {
+  
+    data.id = uuidv4(data.id)
+    
   const user = {
     id: uuid.v4(),
     firstName: data.firstName,
     lastName: data.lastName,
-    password: md5(data.password),
+    password : bcrypt.hash(data.mdp, saltRounds, function(err, hash) {
+      data.mdp = hash
+       })
   };
-
   users.push(user);
 };
 
