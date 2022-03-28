@@ -3,7 +3,6 @@ const router = express.Router();
 const userRepository = require('../models/user-repository');
 
 
-
 router.get('/', (req, res) => {
   res.send(userRepository.getUsers())
 });

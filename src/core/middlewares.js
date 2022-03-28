@@ -7,7 +7,7 @@ const initJwt = (app) =>{
   app.use (jwt({
       secret: 'shhhhhhared-secret',
       algorithms: ['HS256'],
-      credentialsRequired:false
+      //credentialsRequired:false
     }))
   }
 
@@ -33,11 +33,15 @@ const initLoggerMiddlware = (app) => {
   });
 };
 
+exports.initializeAuthMiddlewares = (app) =>{
+  initJwt(app);
+}
+
 exports.initializeConfigMiddlewares = (app) => {
   initJsonHandlerMiddlware(app);
   initCorsMiddlware(app);
   initLoggerMiddlware(app);
-  initJwt(app)
+  
 }
 
 exports.initializeErrorMiddlwares = (app) => {

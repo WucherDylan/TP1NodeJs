@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userRepository = require('../models/user-repository');
 
-router.get("/login",(req,res)=>{
+router.post("/login",(req,res)=>{
     res.send(userRepository.getLogin(req.body))
 })
 
