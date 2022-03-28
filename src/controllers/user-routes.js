@@ -1,6 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const userRepository = require('../models/user-repository');
+const jwt = require('express-jwt')
+
+router.use (jwt({
+    secret: 'shhhhhhared-secret',
+    algorithms: ['HS256'],
+    credentialsRequired:false
+  }))
 
 router.get('/', (req, res) => {
   res.send(userRepository.getUsers())
