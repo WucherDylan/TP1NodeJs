@@ -1,7 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const userRepository = require('../models/user-repository');
+const jwt = require('jsonwebtoken');
 
+function verifyAdmin(){
+  if (jwt.verify(token.role,'secret')==="ADMIN"){
+    return true
+  }
+}
 
 router.get('/', (req, res) => {
   res.send(userRepository.getUsers())
@@ -17,19 +23,34 @@ if (!foundUser) {
 });
 
 router.post('/', (req, res) => {
-  userRepository.createUser(req.body);
-  res.status(201).end();
-});
+  if (verifyAdmin() === true){
+    userRepository.createUser(req.body);
+    res.status(201).end();
+  }
+  else{
+    res.status(403).end();
+  }
+  });
 
 router.put('/:id', (req, res) => {
-  userRepository.updateUser(req.params.id, req.body);
-  res.status(204).end();
-});
+  if (verifyAdmin() === true){
+    userRepository.updateUser(req.params.id, req.body);
+    res.status(204).end();
+  }
+  else {
+    res.status(403).end();
+  }
+  });
 
 router.delete('/:id', (req, res) => {
-  userRepository.deleteUser(req.params.id);
-  res.status(204).end();
-});
+  if (verifyAdmin() === true){
+    userRepository.deleteUser(req.params.id);
+    res.status(204).end();
+  }
+  else {
+    res.status(403).end();
+  }
+  });
 
 exports.initializeRoutes = () => {
   return router;
