@@ -15,7 +15,6 @@ exports.getLogin  = function(data){
       //jwt.verify(token,'secret',function(err,sign){
       //   console.log(sign.leUser.firstName)
       // })
-      
     }
     else console.log("err")
   })

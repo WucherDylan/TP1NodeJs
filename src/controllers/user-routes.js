@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userRepository = require('../models/user-repository');
 const jwt = require('jsonwebtoken');
+const { body, validationResult } = require('express-validator');
 
 function verifyAdmin(){
   if (jwt.verify(token.role,'secret')==="ADMIN"){
@@ -14,6 +15,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:firstName', (req, res) => {
+
   const foundUser = userRepository.getUserByFirstName(req.params.firstName);
 
 if (!foundUser) {
@@ -24,7 +26,11 @@ if (!foundUser) {
 
 router.post('/', (req, res) => {
   if (verifyAdmin() === true){
-    userRepository.createUser(req.body);
+    body('password').isLength({ min: 8 }),
+    userRepository.createUser({
+      firstName: req.body.firstName,
+      password: req.body.password,
+    }).then(user => res.json(user));
     res.status(201).end();
   }
   else{
